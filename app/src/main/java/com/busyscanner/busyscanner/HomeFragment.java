@@ -70,7 +70,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         uploadButton = (Button) rootView.findViewById(R.id.uploadButton);
 
         takePicButton.setOnClickListener(this);
-
+        uploadButton.setOnClickListener(this);
 
         return rootView;
     }
@@ -79,10 +79,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.uploadButton:
-                //TODO
+
                 //choose from gallary or another app that has Images.Media
                 Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivity(intent);
+                //startActivity(intent);
 
                 startActivityForResult(intent, IMAGE_PICKER_SELECT);
 
@@ -170,7 +170,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         } else if (requestCode == IMAGE_PICKER_SELECT  && resultCode == Activity.RESULT_OK) {
             MainActivity activity = (MainActivity)getActivity();
             android.graphics.Bitmap bitmap = getBitmapFromCameraData(data, activity);
-            mSelectedImage.setImageBitmap(bitmap);
+            //mSelectedImage.setImageBitmap(bitmap); //
+            Snackbar.make(getView(), "Image Selected", Snackbar.LENGTH_LONG).show();
         }
     }
 
@@ -187,7 +188,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         Log.d(TAG, Environment.getExternalStorageState());
 
         File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_PICTURES), "Busiscan");
+                Environment.DIRECTORY_PICTURES), "BusiScan");
         // This location works best if you want the created images to be shared
         // between applications and persist after your app has been uninstalled.
 
