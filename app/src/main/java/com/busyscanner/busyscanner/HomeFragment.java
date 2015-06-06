@@ -35,6 +35,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
     public static final String TAG = HomeFragment.class.getSimpleName();
     private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
+    private static final int IMAGE_PICKER_SELECT = 999;//CODE for images being picked from gallary and similar apps
+    private android.widget.ImageView mSelectedImage;
     public static final int MEDIA_TYPE_IMAGE = 1;
     public static final int MEDIA_TYPE_VIDEO = 2;
 
@@ -84,6 +86,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 startActivity(intent);
 
+                startActivityForResult(intent, IMAGE_PICKER_SELECT);
+
                 break;
             case R.id.pictureButton:
                 Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -96,17 +100,21 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 break;
         }
     }
-
-    //Suggested for optimizing the image size
-    /**private void setFullImageFromFilePath(String imagePath) {
+    /**
+     * Scale the photo down and fit it to our image views.
+     *
+     * "Drastically increases performance" to set images using this technique.
+     * Read more:http://developer.android.com/training/camera/photobasics.html
+     */
+    private void setFullImageFromFilePath(String imagePath) {
         // Get the dimensions of the View
         int targetW = mSelectedImage.getWidth();
         int targetH = mSelectedImage.getHeight();
 
         // Get the dimensions of the bitmap
-        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+        android.graphics.BitmapFactory.Options bmOptions = new android.graphics.BitmapFactory.Options();
         bmOptions.inJustDecodeBounds = true;
-        BitmapFactory.decodeFile(imagePath, bmOptions);
+        android.graphics.BitmapFactory.decodeFile(imagePath, bmOptions);
         int photoW = bmOptions.outWidth;
         int photoH = bmOptions.outHeight;
 
@@ -118,10 +126,27 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         bmOptions.inSampleSize = scaleFactor;
         bmOptions.inPurgeable = true;
 
-        android.graphics.Bitmap bitmap = BitmapFactory.decodeFile(imagePath, bmOptions);
+        android.graphics.Bitmap bitmap = android.graphics.BitmapFactory.decodeFile(imagePath, bmOptions);
         mSelectedImage.setImageBitmap(bitmap);
-    }**/
+    }
 
+    /**
+     * Use for decoding camera response data.
+     *
+     * @param data
+     * @param context
+     * @return
+     */
+    public static android.graphics.Bitmap getBitmapFromCameraData(Intent data, android.content.Context context){
+        Uri selectedImage = data.getData();
+        String[] filePathColumn = { MediaStore.Images.Media.DATA };
+        android.database.Cursor cursor = context.getContentResolver().query(selectedImage,filePathColumn, null, null, null);
+        cursor.moveToFirst();
+        int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+        String picturePath = cursor.getString(columnIndex);
+        cursor.close();
+        return android.graphics.BitmapFactory.decodeFile(picturePath);
+    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -142,6 +167,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 Snackbar.make(getView(), getString(R.string.image_capture_failed),
                         Snackbar.LENGTH_LONG).show();
             }
+        } else if (requestCode == IMAGE_PICKER_SELECT  && resultCode == Activity.RESULT_OK) {
+            MainActivity activity = (MainActivity)getActivity();
+            android.graphics.Bitmap bitmap = getBitmapFromCameraData(data, activity);
+            mSelectedImage.setImageBitmap(bitmap);
         }
     }
 
