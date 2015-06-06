@@ -156,6 +156,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                     Snackbar.make(getView(), "Image saved to \n" + fileUri,
                             Snackbar.LENGTH_LONG).show();
                 }
+                ImageUploadFragment fragment = ImageUploadFragment.newInstance(fileUri.toString());
+                getFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, fragment)
+                        .addToBackStack(ImageUploadFragment.TAG)
+                        .commit();
+
             } else if (resultCode == Activity.RESULT_CANCELED) {
                 // User cancelled the image capture
                 if (getView() != null) {
