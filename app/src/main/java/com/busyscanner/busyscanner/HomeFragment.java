@@ -4,8 +4,6 @@ package com.busyscanner.busyscanner;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
-import android.os.Bundle;
-import android.provider.MediaStore;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -16,7 +14,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Toast;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -42,6 +39,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
     private Button takePicButton;
     private Button uploadButton;
+    private Uri fileUri;
 
     /**
      * Use this factory method to create a new instance of
@@ -92,7 +90,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             case R.id.pictureButton:
                 Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
-                Uri fileUri = getOutputMediaFileUri(MEDIA_TYPE_IMAGE); // create a file to save the image
+                fileUri = getOutputMediaFileUri(MEDIA_TYPE_IMAGE); // create a file to save the image
                 cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri); // set the image file name
 
                 // start the image capture Intent
@@ -154,8 +152,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
             if (resultCode == Activity.RESULT_OK) {
                 // Image captured and saved to fileUri specified in the Intent
-                Toast.makeText(getActivity(), "Image saved to:\n" +
-                        data.getData(), Toast.LENGTH_LONG).show();
+                if (getView() != null) {
+                    Snackbar.make(getView(), "Image saved to \n" + fileUri,
+                            Snackbar.LENGTH_LONG).show();
+                }
             } else if (resultCode == Activity.RESULT_CANCELED) {
                 // User cancelled the image capture
                 if (getView() != null) {
@@ -187,14 +187,14 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         Log.d(TAG, Environment.getExternalStorageState());
 
         File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_DCIM), "Busiscan");
+                Environment.DIRECTORY_PICTURES), "Busiscan");
         // This location works best if you want the created images to be shared
         // between applications and persist after your app has been uninstalled.
 
         // Create the storage directory if it does not exist
         if (! mediaStorageDir.exists()){
             if (! mediaStorageDir.mkdirs()){
-                Log.d(TAG, "failed to create directory");
+                Log.e(TAG, "failed to create directory");
                 return null;
             }
         }
