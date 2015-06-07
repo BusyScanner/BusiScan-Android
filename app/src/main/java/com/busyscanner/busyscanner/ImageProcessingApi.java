@@ -15,4 +15,10 @@ public interface ImageProcessingApi {
     void uploadCardImage(@Part("image") TypedFile imageFile,
                          @Part("desc") String description,
                          Callback<List<BizCardResponse>> callback);
+
+    @Multipart
+    @POST("/receiveImg")
+    void uploadImageString(@Part("base64img") String encodedImage,
+                           @Part("desc") String description,
+                           Callback<List<BizCardResponse>> callback);
 }

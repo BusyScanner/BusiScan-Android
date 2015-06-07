@@ -2,12 +2,16 @@ package com.busyscanner.busyscanner;
 
 
 import android.app.Fragment;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.util.List;
 
@@ -65,15 +69,23 @@ public class ImageUploadFragment extends Fragment implements Callback<List<BizCa
 
     private void uploadImage() {
         ImageProcessingApi imageProcessingApi = Access.getInstance().getImageProcessingApi();
+
+        Bitmap bm = BitmapFactory.decodeFile(imagePath.getPath());
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bm.compress(Bitmap.CompressFormat.JPEG, 100, baos); //bm is the bitmap object
+        byte[] byteArrayImage = baos.toByteArray();
+        String encodedImage = Base64.encodeToString(byteArrayImage, Base64.DEFAULT);
+        imageProcessingApi.uploadImageString(encodedImage, "Testing encoded image string thing", this);
+
         TypedFile typedFile = new TypedFile("multipart/form-data", imagePath);
         String desc = "TEST!";
-        imageProcessingApi.uploadCardImage(typedFile, desc, this);
+//        imageProcessingApi.uploadCardImage(typedFile, desc, this);
     }
 
     @Override
     public void failure(RetrofitError error) {
         error.printStackTrace();
-        Toast.makeText(getActivity(), "Image upload failed", Toast.LENGTH_LONG).show();
+        Toast.makeText(getActivity(), error.toString(), Toast.LENGTH_LONG).show();
     }
 
     /**
