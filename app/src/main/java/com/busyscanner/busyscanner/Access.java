@@ -14,7 +14,7 @@ public class Access {
     private static volatile Access instance = null;
     private static final String IMAGE_PROCESSING_ENDPOINT = "http://busiscan.herokuapp.com";
     private static final RestAdapter.LogLevel LOGLEVEL = RestAdapter.LogLevel.FULL;
-    private static final int TIMEOUT = 15; // Seconds
+    private static final int TIMEOUT = 30; // Seconds
     private OkClient okClient;
 
     private ImageProcessingApi imageProcessingApi;

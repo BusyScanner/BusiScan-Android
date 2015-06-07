@@ -146,7 +146,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         String picturePath = cursor.getString(columnIndex);
         cursor.close();
 
-        return selectedImage; //returns selected image
+        return Uri.parse(picturePath); //returns selected image
     }
 
     @Override
@@ -180,8 +180,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             MainActivity activity = (MainActivity)getActivity();
             Uri imageFile = getURIFromCameraData(data, activity);
 
-            //mSelectedImage.setImageBitmap(bitmap); //
             Snackbar.make(getView(), "Image Selected", Snackbar.LENGTH_LONG).show();
+            ImageUploadFragment fragment = ImageUploadFragment.newInstance(imageFile.getPath());
+            getFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, fragment)
+                    .addToBackStack(ImageUploadFragment.TAG)
+                    .commit();
         }
     }
 

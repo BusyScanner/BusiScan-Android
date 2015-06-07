@@ -18,6 +18,6 @@ public interface ImageProcessingApi {
                          Callback<List<BizCardResponse>> callback);
 
     @POST("/receiveImg")
-    void uploadImageString(@Body BizCardRequest body,
-                           Callback<List<BizCardResponse>> callback);
+    void uploadImageBody(@Body BizCardRequest body,
+                         Callback<List<BizCardResponse>> callback);
 }
