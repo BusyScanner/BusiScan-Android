@@ -8,39 +8,29 @@ import retrofit.mime.TypedFile;
  */
 public class BizCardResponse {
 
-    private String name;
-    private String role;
-    private String address;
     private String phone;
+    private String company;
     private String email;
-    private String website;
-    private String twitter;
+    private String fullname;
+    private String _id;
 
-    public String getAddress() {
-        return address;
+    public String get_id() {
+        return _id;
+    }
+
+    public String getCompany() {
+        return company;
     }
 
     public String getEmail() {
         return email;
     }
 
-    public String getName() {
-        return name;
+    public String getFullname() {
+        return fullname;
     }
 
     public String getPhone() {
         return phone;
-    }
-
-    public String getRole() {
-        return role;
-    }
-
-    public String getTwitter() {
-        return twitter;
-    }
-
-    public String getWebsite() {
-        return website;
     }
 }
