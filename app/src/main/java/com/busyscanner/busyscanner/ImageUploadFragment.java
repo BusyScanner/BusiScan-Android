@@ -133,7 +133,7 @@ public class ImageUploadFragment extends Fragment implements Callback<List<BizCa
 
         if(card.getEmail() != null){intent.putExtra(ContactsContract.Intents.Insert.EMAIL, card.getEmail());}
         if(card.getAddress() != null){intent.putExtra(ContactsContract.Intents.Insert.POSTAL, card.getAddress());}
-
+ 
 
     }
 
