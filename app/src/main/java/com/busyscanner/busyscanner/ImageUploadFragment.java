@@ -109,6 +109,4 @@ public class ImageUploadFragment extends Fragment implements Callback<BizCardRes
         msgFragment.popBusy();
         Toast.makeText(getActivity(), "Image upload success", Toast.LENGTH_LONG).show();
     }
-
-
 }
