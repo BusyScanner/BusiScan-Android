@@ -156,7 +156,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                     Snackbar.make(getView(), "Image saved to \n" + fileUri,
                             Snackbar.LENGTH_LONG).show();
                 }
-                ImageUploadFragment fragment = ImageUploadFragment.newInstance(fileUri.toString());
+                ImageUploadFragment fragment = ImageUploadFragment.newInstance(fileUri.getPath());
                 getFragmentManager().beginTransaction()
                         .replace(R.id.fragment_container, fragment)
                         .addToBackStack(ImageUploadFragment.TAG)

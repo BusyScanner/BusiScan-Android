@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import java.io.File;
+import java.util.List;
 
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -21,7 +22,7 @@ import retrofit.mime.TypedFile;
  * Use the {@link ImageUploadFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ImageUploadFragment extends Fragment implements Callback<BizCardResponse> {
+public class ImageUploadFragment extends Fragment implements Callback<List<BizCardResponse>> {
 
     public static final String TAG = ImageUploadFragment.class.getSimpleName();
     private static final String ARG_IMG_URI = "img_uri";
@@ -51,7 +52,7 @@ public class ImageUploadFragment extends Fragment implements Callback<BizCardRes
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         imagePath = new File(getArguments().getString(ARG_IMG_URI));
-
+        uploadImage();
 
     }
 
@@ -82,7 +83,7 @@ public class ImageUploadFragment extends Fragment implements Callback<BizCardRes
      * @param response
      */
     @Override
-    public void success(BizCardResponse bizCardResponse, Response response) {
+    public void success(List<BizCardResponse> bizCardResponse, Response response) {
         Toast.makeText(getActivity(), "Image upload success", Toast.LENGTH_LONG).show();
     }
 }
