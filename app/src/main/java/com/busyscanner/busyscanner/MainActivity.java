@@ -1,8 +1,11 @@
 package com.busyscanner.busyscanner;
 
-import android.support.v7.app.AppCompatActivity;
+import android.app.Fragment;
+import android.app.FragmentManager;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -45,5 +48,30 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        Fragment fragment = getTopOfBackStackFragment(0);
+        if (fragment instanceof ImageUploadFragment) {
+            getFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, HomeFragment.newInstance())
+                    .commit();
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    protected Fragment getTopOfBackStackFragment(final int pendingPopCount) {
+        final FragmentManager fragmentManager = getFragmentManager();
+        final int entryCount = fragmentManager.getBackStackEntryCount();
+        if (entryCount > pendingPopCount) {
+            final String tag = fragmentManager
+                    .getBackStackEntryAt(entryCount - 1 - pendingPopCount)
+                    .getName();
+            Log.d(TAG, "Top of back stack tag: " + tag);
+            return fragmentManager.findFragmentByTag(tag);
+        }
+        return null;
     }
 }

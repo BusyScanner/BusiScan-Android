@@ -30,7 +30,7 @@ public class ImageUploadFragment extends Fragment implements Callback<List<BizCa
 
     public static final String TAG = ImageUploadFragment.class.getSimpleName();
     private static final String ARG_IMG_URI = "img_uri";
-
+    private MsgFragment msgFragment;
     private File imagePath;
 
     /**
@@ -56,6 +56,11 @@ public class ImageUploadFragment extends Fragment implements Callback<List<BizCa
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         imagePath = new File(getArguments().getString(ARG_IMG_URI));
+
+        msgFragment = new MsgFragment();
+        getChildFragmentManager().beginTransaction()
+                .replace(R.id.msgfragment_container, msgFragment)
+                .commit();
         uploadImage();
 
     }
@@ -70,22 +75,28 @@ public class ImageUploadFragment extends Fragment implements Callback<List<BizCa
     private void uploadImage() {
         ImageProcessingApi imageProcessingApi = Access.getInstance().getImageProcessingApi();
 
+        msgFragment.pushBusy();
+
         Bitmap bm = BitmapFactory.decodeFile(imagePath.getPath());
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bm.compress(Bitmap.CompressFormat.JPEG, 100, baos); //bm is the bitmap object
+        bm.compress(Bitmap.CompressFormat.JPEG, 20, baos); //bm is the bitmap object
         byte[] byteArrayImage = baos.toByteArray();
         String encodedImage = Base64.encodeToString(byteArrayImage, Base64.DEFAULT);
-        imageProcessingApi.uploadImageString(encodedImage, "Testing encoded image string thing", this);
+        BizCardRequest request = new BizCardRequest("Testing encoded image string thing", encodedImage);
+//        imageProcessingApi.uploadImageString(request, this);
 
-        TypedFile typedFile = new TypedFile("multipart/form-data", imagePath);
+        TypedFile typedFile = new TypedFile("image/jpg", imagePath);
         String desc = "TEST!";
-//        imageProcessingApi.uploadCardImage(typedFile, desc, this);
+        imageProcessingApi.uploadCardImage(typedFile, desc, this);
     }
 
     @Override
     public void failure(RetrofitError error) {
+        msgFragment.popBusy();
         error.printStackTrace();
-        Toast.makeText(getActivity(), error.toString(), Toast.LENGTH_LONG).show();
+        if (getActivity() != null) {
+            msgFragment.setMsg(error.toString());
+        }
     }
 
     /**
@@ -96,6 +107,9 @@ public class ImageUploadFragment extends Fragment implements Callback<List<BizCa
      */
     @Override
     public void success(List<BizCardResponse> bizCardResponse, Response response) {
+        msgFragment.popBusy();
         Toast.makeText(getActivity(), "Image upload success", Toast.LENGTH_LONG).show();
     }
+
+
 }
