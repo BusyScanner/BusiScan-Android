@@ -26,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.main_toolbar);
         setSupportActionBar(toolbar);
+//        addDummyData();
     }
 
     @Override
@@ -73,5 +74,13 @@ public class MainActivity extends AppCompatActivity {
             return fragmentManager.findFragmentByTag(tag);
         }
         return null;
+    }
+
+    private void addDummyData() {
+        new BizCardResponse("Hogwarts Inc", "thechosenone@hogwarts.com", "Harry Potter", "(123) 456-7890").save();
+        new BizCardResponse("Hogwarts Inc", "thechosenone@hogwarts.com", "Harry Potter", "(123) 456-7890").save();
+        new BizCardResponse("Hogwarts Inc", "thechosenone@hogwarts.com", "Harry Potter", "(123) 456-7890").save();
+        new BizCardResponse("Hogwarts Inc", "thechosenone@hogwarts.com", "Harry Potter", "(123) 456-7890").save();
+        new BizCardResponse("Hogwarts Inc", "thechosenone@hogwarts.com", "Harry Potter", "(123) 456-7890").save();
     }
 }

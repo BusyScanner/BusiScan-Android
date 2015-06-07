@@ -137,6 +137,4 @@ public class ImageUploadFragment extends Fragment implements Callback<BizCardRes
  
 
     }
-
-
 }
