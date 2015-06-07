@@ -18,6 +18,9 @@ public class BizCardResponse extends SugarRecord<BizCardResponse> {
     @Ignore
     private String _id;
 
+    public BizCardResponse() {
+    }
+
     public BizCardResponse(String company, String email, String fullname, String phone) {
         this.company = company;
         this.email = email;

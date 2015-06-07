@@ -9,37 +9,40 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.design.widget.Snackbar;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link HomeFragment#newInstance} factory method to
  * create an instance of this fragment.
- *
- * Use for permission of getting image from gallary
- * <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
  */
 public class HomeFragment extends Fragment implements View.OnClickListener {
 
     public static final String TAG = HomeFragment.class.getSimpleName();
     private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
     private static final int IMAGE_PICKER_SELECT = 999;//CODE for images being picked from gallary and similar apps
-    private android.widget.ImageView mSelectedImage;
     public static final int MEDIA_TYPE_IMAGE = 1;
     public static final int MEDIA_TYPE_VIDEO = 2;
 
     private Button takePicButton;
     private Button uploadButton;
     private Uri fileUri;
+    private RecyclerView recyclerView;
+    private CardAdapter adapter;
+    private TextView errorText;
 
     /**
      * Use this factory method to create a new instance of
@@ -59,6 +62,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        adapter = new CardAdapter();
     }
 
     @Override
@@ -68,6 +72,18 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         View rootView = inflater.inflate(R.layout.fragment_home, container, false);
         takePicButton = (Button) rootView.findViewById(R.id.pictureButton);
         uploadButton = (Button) rootView.findViewById(R.id.uploadButton);
+        errorText = (TextView) rootView.findViewById(R.id.error_message);
+
+        recyclerView = (RecyclerView) rootView.findViewById(R.id.home_recyclerview);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerView.setAdapter(adapter);
+        List<BizCardResponse> cards = BizCardResponse.listAll(BizCardResponse.class);
+
+        if (cards.size() == 0) {
+            errorText.setText("No cards in memory.\nAdd one!");
+        } else {
+            adapter.setCards(cards);
+        }
 
         takePicButton.setOnClickListener(this);
         uploadButton.setOnClickListener(this);
@@ -106,29 +122,29 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
      * "Drastically increases performance" to set images using this technique.
      * Read more:http://developer.android.com/training/camera/photobasics.html
      */
-    private void setFullImageFromFilePath(String imagePath) {
-        // Get the dimensions of the View
-        int targetW = mSelectedImage.getWidth();
-        int targetH = mSelectedImage.getHeight();
-
-        // Get the dimensions of the bitmap
-        android.graphics.BitmapFactory.Options bmOptions = new android.graphics.BitmapFactory.Options();
-        bmOptions.inJustDecodeBounds = true;
-        android.graphics.BitmapFactory.decodeFile(imagePath, bmOptions);
-        int photoW = bmOptions.outWidth;
-        int photoH = bmOptions.outHeight;
-
-        // Determine how much to scale down the image
-        int scaleFactor = Math.min(photoW/targetW, photoH/targetH);
-
-        // Decode the image file into a Bitmap sized to fill the View
-        bmOptions.inJustDecodeBounds = false;
-        bmOptions.inSampleSize = scaleFactor;
-        bmOptions.inPurgeable = true;
-
-        android.graphics.Bitmap bitmap = android.graphics.BitmapFactory.decodeFile(imagePath, bmOptions);
-        mSelectedImage.setImageBitmap(bitmap);
-    }
+//    private void setFullImageFromFilePath(String imagePath) {
+//        // Get the dimensions of the View
+//        int targetW = mSelectedImage.getWidth();
+//        int targetH = mSelectedImage.getHeight();
+//
+//        // Get the dimensions of the bitmap
+//        android.graphics.BitmapFactory.Options bmOptions = new android.graphics.BitmapFactory.Options();
+//        bmOptions.inJustDecodeBounds = true;
+//        android.graphics.BitmapFactory.decodeFile(imagePath, bmOptions);
+//        int photoW = bmOptions.outWidth;
+//        int photoH = bmOptions.outHeight;
+//
+//        // Determine how much to scale down the image
+//        int scaleFactor = Math.min(photoW/targetW, photoH/targetH);
+//
+//        // Decode the image file into a Bitmap sized to fill the View
+//        bmOptions.inJustDecodeBounds = false;
+//        bmOptions.inSampleSize = scaleFactor;
+//        bmOptions.inPurgeable = true;
+//
+//        android.graphics.Bitmap bitmap = android.graphics.BitmapFactory.decodeFile(imagePath, bmOptions);
+//        mSelectedImage.setImageBitmap(bitmap);
+//    }
 
     /**
      * Use for decoding camera response data.

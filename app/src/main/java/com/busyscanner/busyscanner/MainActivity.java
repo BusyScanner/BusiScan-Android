@@ -18,6 +18,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+//        addDummyData();
         HomeFragment fragment = HomeFragment.newInstance();
         getFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, fragment)
@@ -26,7 +27,6 @@ public class MainActivity extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.main_toolbar);
         setSupportActionBar(toolbar);
-//        addDummyData();
     }
 
     @Override
