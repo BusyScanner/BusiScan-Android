@@ -33,15 +33,17 @@
             android:id="@+id/uploadButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="20dp"
-            android:text="@string/upload_a_picture" />
+            android:textSize="16sp"
+            android:text="@string/upload_a_picture"
+            android:layout_weight="1"/>
 
         <Button
             android:id="@+id/pictureButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="20dp"
-            android:text="@string/take_picture"/>
+            android:textSize="16sp"
+            android:text="@string/take_picture"
+            android:layout_weight="1"/>
 
     </LinearLayout>
 
