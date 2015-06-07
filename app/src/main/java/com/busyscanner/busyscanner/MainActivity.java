@@ -19,6 +19,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 //        addDummyData();
+
+
         HomeFragment fragment = HomeFragment.newInstance();
         getFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, fragment, HomeFragment.TAG)
@@ -54,9 +56,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         Fragment fragment = getTopOfBackStackFragment(0);
-        if (fragment instanceof ImageUploadFragment) {
+        if (fragment instanceof ImageUploadFragment || fragment instanceof ThingFragment) {
             getFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_container, HomeFragment.newInstance())
+                    .replace(R.id.fragment_container, HomeFragment.newInstance(), HomeFragment.TAG)
                     .commit();
         } else {
             super.onBackPressed();
@@ -75,9 +77,8 @@ public class MainActivity extends AppCompatActivity {
         }
         return null;
     }
-
     private void addDummyData() {
-        new BizCardResponse("Hogwarts Inc", "thechosenone@hogwarts.com", "Harry Potter", "(123) 456-7890").save();
+        new BizCardResponse("Hogwarts Inc", "thechosenone@hogwarts.com", "Your mom", "(123) 456-7890").save();
         new BizCardResponse("Hogwarts Inc", "thechosenone@hogwarts.com", "Harry Potter", "(123) 456-7890").save();
         new BizCardResponse("Hogwarts Inc", "thechosenone@hogwarts.com", "Harry Potter", "(123) 456-7890").save();
         new BizCardResponse("Hogwarts Inc", "thechosenone@hogwarts.com", "Harry Potter", "(123) 456-7890").save();

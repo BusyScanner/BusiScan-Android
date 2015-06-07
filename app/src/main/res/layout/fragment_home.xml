@@ -36,6 +36,7 @@
             android:layout_height="wrap_content"
             android:textSize="16sp"
             android:text="@string/upload_a_picture"
+            android:width="0dp"
             android:layout_weight="1"/>
 
         <Button
@@ -44,6 +45,7 @@
             android:layout_height="wrap_content"
             android:textSize="16sp"
             android:text="@string/take_picture"
+            android:width="0dp"
             android:layout_weight="1"/>
 
     </LinearLayout>

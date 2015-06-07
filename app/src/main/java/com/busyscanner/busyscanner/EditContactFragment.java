@@ -87,7 +87,13 @@ public class EditContactFragment extends Fragment {
         setButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                ThingFragment fragment = ThingFragment.newInstance(nameEdit.getText().toString(),
+                        emailEdit.getText().toString(),
+                        companyEdit.getText().toString(), phoneEdit.getText().toString());
+                getFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, fragment, ThingFragment.TAG)
+                        .addToBackStack(ThingFragment.TAG)
+                        .commit();
             }
         });
 

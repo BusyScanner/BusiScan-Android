@@ -52,22 +52,22 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.MyViewHolder> 
         if (TextUtils.isEmpty(card.getFullname())) {
             myViewHolder.nameView.setText("");
         } else {
-            myViewHolder.nameView.setText("Name: " + card.getFullname());
+            myViewHolder.nameView.setText(card.getFullname());
         }
         if (TextUtils.isEmpty(card.getCompany())) {
             myViewHolder.companyView.setText("");
         } else {
-            myViewHolder.companyView.setText("Company: " + card.getCompany());
+            myViewHolder.companyView.setText(card.getCompany());
         }
         if (TextUtils.isEmpty(card.getEmail())) {
             myViewHolder.emailView.setText("");
         } else {
-            myViewHolder.emailView.setText("Email: " + card.getEmail());
+            myViewHolder.emailView.setText( card.getEmail());
         }
         if (TextUtils.isEmpty(card.getPhone())) {
             myViewHolder.phoneView.setText("");
         } else {
-            myViewHolder.phoneView.setText("Phone: " + card.getPhone());
+            myViewHolder.phoneView.setText(card.getPhone());
         }
     }
 

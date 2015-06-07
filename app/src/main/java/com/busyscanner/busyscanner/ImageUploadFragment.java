@@ -149,7 +149,6 @@ public class ImageUploadFragment extends Fragment implements Callback<BizCardRes
                     .commit();
             return;
         }
-        cardResponse.save();
         if (getView() != null) {
             addDataToCard(bizCardResponse);
             resultsLayout.setVisibility(View.VISIBLE);
@@ -186,6 +185,7 @@ public class ImageUploadFragment extends Fragment implements Callback<BizCardRes
 
     //
     public void newContact(BizCardResponse card){
+        card.save();
         // Creates a new Intent to insert a contact
         Intent intent = new Intent(android.provider.ContactsContract.Intents.Insert.ACTION);
         // Sets the MIME type to match the Contacts Provider
