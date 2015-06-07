@@ -84,7 +84,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 //startActivity(intent);
 
+                //fileUri = getOutputMediaFileUri(IMAGE_PICKER_SELECT);
                 startActivityForResult(intent, IMAGE_PICKER_SELECT);
+
 
                 break;
             case R.id.pictureButton:
@@ -135,7 +137,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
      * @param context
      * @return
      */
-    public static android.graphics.Bitmap getBitmapFromCameraData(Intent data, android.content.Context context){
+    public static Uri getURIFromCameraData(Intent data, android.content.Context context){
         Uri selectedImage = data.getData();
         String[] filePathColumn = { MediaStore.Images.Media.DATA };
         android.database.Cursor cursor = context.getContentResolver().query(selectedImage,filePathColumn, null, null, null);
@@ -143,7 +145,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
         String picturePath = cursor.getString(columnIndex);
         cursor.close();
-        return android.graphics.BitmapFactory.decodeFile(picturePath);
+
+        return selectedImage; //returns selected image
     }
 
     @Override
@@ -175,7 +178,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             }
         } else if (requestCode == IMAGE_PICKER_SELECT  && resultCode == Activity.RESULT_OK) {
             MainActivity activity = (MainActivity)getActivity();
-            android.graphics.Bitmap bitmap = getBitmapFromCameraData(data, activity);
+            Uri imageFile = getURIFromCameraData(data, activity);
+
             //mSelectedImage.setImageBitmap(bitmap); //
             Snackbar.make(getView(), "Image Selected", Snackbar.LENGTH_LONG).show();
         }
