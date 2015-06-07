@@ -12,7 +12,7 @@ public class Access {
 
     public static final String TAG = Access.class.getSimpleName();
     private static volatile Access instance = null;
-    private static final String IMAGE_PROCESSING_ENDPOINT = "http://busiscan.herokuapp.com";
+    private static final String HEROKU_ENDPOINT = "http://busiscan.herokuapp.com";
     private static final String BLUEMIX_ENDPOINT = "http://busiscan.mybluemix.net";
     private static final RestAdapter.LogLevel LOGLEVEL = RestAdapter.LogLevel.HEADERS;
     private static final int TIMEOUT = 30; // Seconds
@@ -42,7 +42,7 @@ public class Access {
     public ImageProcessingApi getImageProcessingApi() {
         if (imageProcessingApi == null) {
             RestAdapter restAdapter = new RestAdapter.Builder()
-                    .setEndpoint(BLUEMIX_ENDPOINT)
+                    .setEndpoint(HEROKU_ENDPOINT)
                     .setLogLevel(LOGLEVEL)
                     .setLog(new AndroidLog(TAG))
                     .setClient(okClient)

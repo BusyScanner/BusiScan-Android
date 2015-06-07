@@ -15,10 +15,14 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:visibility="gone"
+        android:id="@+id/result_layout">
         <include
             android:id="@+id/card_item"
-            layout="@layout/card_list_item" />
+            layout="@layout/card_list_item"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

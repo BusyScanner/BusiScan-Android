@@ -1,17 +1,22 @@
 package com.busyscanner.busyscanner;
 
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
-import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.provider.ContactsContract;
+import android.support.design.widget.Snackbar;
+import android.support.v7.widget.CardView;
+import android.text.TextUtils;
 import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.ByteArrayOutputStream;
@@ -28,12 +33,18 @@ import retrofit.mime.TypedFile;
  * Use the {@link ImageUploadFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ImageUploadFragment extends Fragment implements Callback<BizCardResponse> {
+public class ImageUploadFragment extends Fragment implements Callback<BizCardResponse>, View.OnClickListener {
 
     public static final String TAG = ImageUploadFragment.class.getSimpleName();
     private static final String ARG_IMG_URI = "img_uri";
     private MsgFragment msgFragment;
     private File imagePath;
+    private CardView cardView;
+    private Button editButton;
+    private Button addToContacts;
+    private View resultsLayout;
+    private BizCardResponse cardResponse;
+    private static final int REQUEST_CODE_ADD_CONTACT = 100;
 
     /**
      * Use this factory method to create a new instance of
@@ -71,7 +82,21 @@ public class ImageUploadFragment extends Fragment implements Callback<BizCardRes
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_image_upload, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_image_upload, container, false);
+
+        cardView = (CardView) rootView.findViewById(R.id.card_item);
+        editButton = (Button) rootView.findViewById(R.id.edit_button);
+        addToContacts = (Button) rootView.findViewById(R.id.add_to_contacts);
+        resultsLayout = rootView.findViewById(R.id.result_layout);
+
+        if (cardResponse != null) {
+            resultsLayout.setVisibility(View.GONE);
+        }
+
+        editButton.setOnClickListener(this);
+        addToContacts.setOnClickListener(this);
+
+        return rootView;
     }
 
     private void uploadImage() {
@@ -110,14 +135,49 @@ public class ImageUploadFragment extends Fragment implements Callback<BizCardRes
     @Override
     public void success(BizCardResponse bizCardResponse, Response response) {
         msgFragment.popBusy();
-        Toast.makeText(getActivity(), "Image upload success", Toast.LENGTH_LONG).show();
-        //TODO display what the JS says is on the card to ask the user for correctness
-
-        
-
-        newContact(bizCardResponse);
+        cardResponse = bizCardResponse;
+        if (cardResponse.hasNullFields()) {
+            Toast.makeText(getActivity(), "Failed to read card!", Toast.LENGTH_LONG).show();
+            HomeFragment fragment = HomeFragment.newInstance();
+            getFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, fragment)
+                    .commit();
+            return;
+        }
+        cardResponse.save();
+        if (getView() != null) {
+            addDataToCard(bizCardResponse);
+            resultsLayout.setVisibility(View.VISIBLE);
+        }
     }
 
+    private void addDataToCard(BizCardResponse card) {
+        TextView nameView = (TextView) cardView.findViewById(R.id.list_name);
+        TextView companyView = (TextView) cardView.findViewById(R.id.list_company);
+        TextView emailView = (TextView) cardView.findViewById(R.id.list_email);
+        TextView phoneView = (TextView) cardView.findViewById(R.id.list_phone);
+
+        if (TextUtils.isEmpty(card.getFullname())) {
+            nameView.setText("");
+        } else {
+            nameView.setText("Name: " + card.getFullname());
+        }
+        if (TextUtils.isEmpty(card.getCompany())) {
+            companyView.setText("");
+        } else {
+            companyView.setText("Company: " + card.getCompany());
+        }
+        if (TextUtils.isEmpty(card.getEmail())) {
+            emailView.setText("");
+        } else {
+            emailView.setText("Email: " + card.getEmail());
+        }
+        if (TextUtils.isEmpty(card.getPhone())) {
+            phoneView.setText("");
+        } else {
+            phoneView.setText("Phone: " + card.getPhone());
+        }
+    }
 
     //
     public void newContact(BizCardResponse card){
@@ -126,15 +186,34 @@ public class ImageUploadFragment extends Fragment implements Callback<BizCardRes
         // Sets the MIME type to match the Contacts Provider
         intent.setType(ContactsContract.RawContacts.CONTENT_TYPE);
 
-//        private android.widget.EditText mEmailAddress = (android.widget.EditText) findViewById(R.id.email);
-//        private android.widget.EditText mPhoneNumber = (android.widget.EditText) findViewById(R.id.phone);
-
-        intent.putExtra(ContactsContract.Intents.Insert.NAME, card.getFullname());//set required
+        intent.putExtra(ContactsContract.Intents.Insert.NAME, card.getFullname());
         intent.putExtra(ContactsContract.Intents.Insert.PHONE, card.getPhone());
 
         if(card.getEmail() != null){intent.putExtra(ContactsContract.Intents.Insert.EMAIL, card.getEmail());}
         if(card.getCompany() != null){intent.putExtra(ContactsContract.Intents.Insert.COMPANY, card.getCompany());}
- 
 
+        startActivityForResult(intent, REQUEST_CODE_ADD_CONTACT);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_CODE_ADD_CONTACT) {
+            if (resultCode == Activity.RESULT_OK) {
+                Snackbar.make(getView(), "Contact added successfully", Snackbar.LENGTH_LONG).show();
+            } else if (resultCode == Activity.RESULT_CANCELED) {
+                Snackbar.make(getView(), "Contact not added", Snackbar.LENGTH_LONG).show();
+            }
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.edit_button:
+                break;
+            case R.id.add_to_contacts:
+                newContact(cardResponse);
+                break;
+        }
     }
 }

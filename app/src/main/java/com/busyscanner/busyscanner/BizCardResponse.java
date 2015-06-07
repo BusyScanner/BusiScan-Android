@@ -47,4 +47,8 @@ public class BizCardResponse extends SugarRecord<BizCardResponse> {
     public String getPhone() {
         return phone;
     }
+
+    public boolean hasNullFields() {
+        return phone == null && company == null && email == null && fullname == null;
+    }
 }

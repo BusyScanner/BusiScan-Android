@@ -73,5 +73,6 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.MyViewHolder> 
 
     public void setCards(List<BizCardResponse> cards) {
         this.cards = cards;
+        notifyDataSetChanged();
     }
 }
