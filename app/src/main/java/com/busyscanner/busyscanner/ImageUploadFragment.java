@@ -82,11 +82,11 @@ public class ImageUploadFragment extends Fragment implements Callback<List<BizCa
 
         Bitmap bm = BitmapFactory.decodeFile(imagePath.getPath());
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bm.compress(Bitmap.CompressFormat.JPEG, 20, baos); //bm is the bitmap object
+        bm.compress(Bitmap.CompressFormat.JPEG, 10, baos); //bm is the bitmap object
         byte[] byteArrayImage = baos.toByteArray();
         String encodedImage = Base64.encodeToString(byteArrayImage, Base64.DEFAULT);
         BizCardRequest request = new BizCardRequest("Testing encoded image string thing", encodedImage);
-//        imageProcessingApi.uploadImageString(request, this);
+//        imageProcessingApi.uploadImageBody(request, this);
 
         TypedFile typedFile = new TypedFile("image/jpg", imagePath);
         String desc = "TEST!";
