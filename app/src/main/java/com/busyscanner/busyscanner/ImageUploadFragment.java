@@ -114,7 +114,7 @@ public class ImageUploadFragment extends Fragment implements Callback<List<BizCa
         Toast.makeText(getActivity(), "Image upload success", Toast.LENGTH_LONG).show();
         //TODO display what the JS says is on the card to ask the user for correctness
 
-        newContact(bizCardResponse);
+        newContact(bizCardResponse.get(0));
     }
 
 
@@ -125,8 +125,8 @@ public class ImageUploadFragment extends Fragment implements Callback<List<BizCa
         // Sets the MIME type to match the Contacts Provider
         intent.setType(ContactsContract.RawContacts.CONTENT_TYPE);
 
-        private android.widget.EditText mEmailAddress = (android.widget.EditText) findViewById(R.id.email);
-        private android.widget.EditText mPhoneNumber = (android.widget.EditText) findViewById(R.id.phone);
+//        private android.widget.EditText mEmailAddress = (android.widget.EditText) findViewById(R.id.email);
+//        private android.widget.EditText mPhoneNumber = (android.widget.EditText) findViewById(R.id.phone);
 
         intent.putExtra(ContactsContract.Intents.Insert.NAME, card.getName());//set required
         intent.putExtra(ContactsContract.Intents.Insert.PHONE, card.getPhone());
