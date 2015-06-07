@@ -1,5 +1,7 @@
 package com.busyscanner.busyscanner;
 
+import java.util.List;
+
 import retrofit.Callback;
 import retrofit.http.Multipart;
 import retrofit.http.POST;
@@ -12,5 +14,5 @@ public interface ImageProcessingApi {
     @POST("/receiveImg")
     void uploadCardImage(@Part("image") TypedFile imageFile,
                          @Part("desc") String description,
-                         Callback<BizCardResponse> callback);
+                         Callback<List<BizCardResponse>> callback);
 }
