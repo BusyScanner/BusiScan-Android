@@ -1,11 +1,13 @@
 package com.busyscanner.busyscanner;
 
 
-import android.os.Bundle;
 import android.app.Fragment;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 
 
 /**
@@ -14,30 +16,40 @@ import android.view.ViewGroup;
  * create an instance of this fragment.
  */
 public class EditContactFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    public static final String TAG = EditContactFragment.class.getSimpleName();
+    private static final String ARG_NAME = "name";
+    private static final String ARG_EMAIL = "email";
+    private static final String ARG_COMPANY = "company";
+    private static final String ARG_PHONE = "phone";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private EditText nameEdit;
+    private EditText emailEdit;
+    private EditText companyEdit;
+    private EditText phoneEdit;
+    private Button setButton;
+
+    private String name;
+    private String email;
+    private String company;
+    private String phone;
 
 
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
+     * @param name Parameter 1.
+     * @param email Parameter 2.
      * @return A new instance of fragment EditContactFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static EditContactFragment newInstance(String param1, String param2) {
+    public static EditContactFragment newInstance(String name, String email, String company, String phone) {
         EditContactFragment fragment = new EditContactFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putString(ARG_NAME, name);
+        args.putString(ARG_EMAIL, email);
+        args.putString(ARG_COMPANY, company);
+        args.putString(ARG_PHONE, phone);
         fragment.setArguments(args);
         return fragment;
     }
@@ -49,17 +61,37 @@ public class EditContactFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+        Bundle args = getArguments();
+        name = args.getString(ARG_NAME);
+        email = args.getString(ARG_EMAIL);
+        company = args.getString(ARG_COMPANY);
+        phone = args.getString(ARG_PHONE);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_edit_contact, container, false);
+
+        View rootView = inflater.inflate(R.layout.fragment_edit_contact, container, false);
+        nameEdit = (EditText) rootView.findViewById(R.id.edit_name);
+        emailEdit = (EditText) rootView.findViewById(R.id.edit_email);
+        companyEdit = (EditText) rootView.findViewById(R.id.edit_company);
+        phoneEdit = (EditText) rootView.findViewById(R.id.edit_phone);
+        setButton = (Button) rootView.findViewById(R.id.set_button);
+
+        nameEdit.setText(name);
+        emailEdit.setText(email);
+        companyEdit.setText(company);
+        phoneEdit.setText(phone);
+
+        setButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        return rootView;
     }
 
 

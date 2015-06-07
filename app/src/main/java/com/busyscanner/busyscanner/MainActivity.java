@@ -21,7 +21,7 @@ public class MainActivity extends AppCompatActivity {
 //        addDummyData();
         HomeFragment fragment = HomeFragment.newInstance();
         getFragmentManager().beginTransaction()
-                .replace(R.id.fragment_container, fragment)
+                .replace(R.id.fragment_container, fragment, HomeFragment.TAG)
                 .addToBackStack(HomeFragment.TAG)
                 .commit();
 

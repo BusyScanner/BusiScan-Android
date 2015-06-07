@@ -177,7 +177,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 }
                 ImageUploadFragment fragment = ImageUploadFragment.newInstance(fileUri.getPath());
                 getFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_container, fragment)
+                        .replace(R.id.fragment_container, fragment, ImageUploadFragment.TAG)
                         .addToBackStack(ImageUploadFragment.TAG)
                         .commit();
 
@@ -199,7 +199,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             Snackbar.make(getView(), "Image Selected", Snackbar.LENGTH_LONG).show();
             ImageUploadFragment fragment = ImageUploadFragment.newInstance(imageFile.getPath());
             getFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_container, fragment)
+                    .replace(R.id.fragment_container, fragment, ImageUploadFragment.TAG)
                     .addToBackStack(ImageUploadFragment.TAG)
                     .commit();
         }

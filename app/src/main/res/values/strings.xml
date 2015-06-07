@@ -5,8 +5,8 @@
     <string name="action_settings">Settings</string>
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="upload_a_picture">Upload a picture!</string>
-    <string name="take_picture">Take a picture!</string>
+    <string name="upload_a_picture">Upload existing</string>
+    <string name="take_picture">Take a picture</string>
     <string name="image_capture_failed">Image capture failed</string>
     <string name="image_capture_cancelled">Image capture cancelled</string>
     <string name="edit">Edit</string>

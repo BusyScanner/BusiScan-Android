@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.net.SocketTimeoutException;
 
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -106,7 +107,7 @@ public class ImageUploadFragment extends Fragment implements Callback<BizCardRes
 
         Bitmap bm = BitmapFactory.decodeFile(imagePath.getPath());
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bm.compress(Bitmap.CompressFormat.JPEG, 10, baos); //bm is the bitmap object
+        bm.compress(Bitmap.CompressFormat.JPEG, 100, baos); //bm is the bitmap object
         byte[] byteArrayImage = baos.toByteArray();
         String encodedImage = Base64.encodeToString(byteArrayImage, Base64.DEFAULT);
         BizCardRequest request = new BizCardRequest("Testing encoded image string thing", encodedImage);
@@ -122,7 +123,11 @@ public class ImageUploadFragment extends Fragment implements Callback<BizCardRes
         msgFragment.popBusy();
         error.printStackTrace();
         if (getActivity() != null) {
-            msgFragment.setMsg(error.toString());
+            if (error.getCause() instanceof SocketTimeoutException) {
+                msgFragment.setMsg("Timed out!");
+            } else {
+                msgFragment.setMsg(error.toString());
+            }
         }
     }
 
@@ -210,6 +215,12 @@ public class ImageUploadFragment extends Fragment implements Callback<BizCardRes
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.edit_button:
+                EditContactFragment fragment = EditContactFragment.newInstance(cardResponse.getFullname(),
+                        cardResponse.getEmail(), cardResponse.getCompany(), cardResponse.getPhone());
+                getFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, fragment)
+                        .addToBackStack(EditContactFragment.TAG)
+                        .commit();
                 break;
             case R.id.add_to_contacts:
                 newContact(cardResponse);
